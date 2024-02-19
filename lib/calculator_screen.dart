@@ -9,6 +9,10 @@ class CalculatorScreen extends StatefulWidget {
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
+  String number1 = ""; //always has values of . 0-9
+  String operand = ""; // + - * /
+  String number2 = ""; // . 0-9
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -25,7 +29,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   alignment: Alignment.bottomRight,
                   padding: const EdgeInsets.all(16),
                   child: Text(
-                    "0",
+                    "$number1$operand$number2".isEmpty
+                        //check if any of these variables are empty
+                        ? "0" //if empty display 0
+                        : "$number1$operand$number2", //if not empty display the values of the variables
                     style: const TextStyle(
                         fontSize: 48, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.end,
@@ -51,6 +58,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     );
   }
 
+  //###############################
   Widget buildButton(value) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
@@ -64,7 +72,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 100)), //Makes the shape of the button and establishes the radius of the circle.
         child: InkWell(
           //Ink well makes the button tappable, so we wrap this all in an inkwell widget.
-          onTap: () {},
+          onTap: () => onBtnTap(value),
           child: Center(
             child: Text(
               value,
@@ -76,6 +84,49 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     );
   }
 
+  //#############################
+  void onBtnTap(String value) {}
+
+  //#############################
+  //appends value to the end
+  void appendValue(String value) {
+    //number1 operand number2 selection criteria
+    // 234      +       5343
+
+    if (value != Btn.dot && int.tryParse(value) == null) {
+      //if is operand and not dot
+      if (operand.isNotEmpty && number2.isNotEmpty) {
+        // TODO calculate the equation before assigning new values
+      }
+      operand = value;
+      //asign value to number1 variable
+    } else if (number1.isEmpty || operand.isEmpty) {
+      //check if value is ". | ex: number1 = "1.2
+      if (value == Btn.dot && number1.contains(Btn.dot)) {
+        return;
+      }
+      if (value == Btn.dot && (number1.isEmpty || number1 == Btn.dot)) {
+        //ex: number1 = "" | "0"
+        value = "0.";
+      }
+      number1 += value;
+      //asign value to number2 variable
+    } else if (number2.isEmpty || operand.isNotEmpty) {
+      //check if number 2 is empty or if operand is not empty
+      if (value == Btn.dot && number2.contains(Btn.dot)) {
+        return;
+      }
+      if (value == Btn.dot && (number2.isEmpty || number2 == Btn.dot)) {
+        //ex: number1 = "" | "0"
+        value = "0.";
+      }
+      number2 += value;
+    }
+
+    setState(() {});
+  }
+
+  //#############################
   Color getBtnColor(value) {
     return [Btn.del, Btn.clr].contains(value)
         ? Colors.blueGrey
