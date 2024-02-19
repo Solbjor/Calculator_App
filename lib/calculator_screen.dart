@@ -38,7 +38,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               children: Btn.buttonValues
                   //we use a SizedBox to assign all our button's values into seperate boxes and align them according to the screen size.
                   .map((value) => SizedBox(
-                      width: screenSize.width / 4,
+                      width: value == Btn.n0
+                          ? screenSize.width / 2
+                          : (screenSize.width / 4),
                       height: screenSize.width / 5,
                       child: buildButton(value)))
                   .toList(),
@@ -50,20 +52,39 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   }
 
   Widget buildButton(value) {
-    return Material(
-      //material lets us give it styling and splash effects on tap.
-      clipBehavior: Clip.hardEdge,
-      shape: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.white24),
-          borderRadius: BorderRadius.circular(
-              100)), //Makes the shape of the button and establishes the radius of the circle.
-      child: InkWell(
-        //Ink well makes the button tappable, so we wrap this all in an inkwell widget.
-        onTap: () {},
-        child: Center(
-          child: Text(value),
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Material(
+        //material lets us give it styling and splash effects on tap.
+        color: getBtnColor(value),
+        clipBehavior: Clip.hardEdge,
+        shape: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.white24),
+            borderRadius: BorderRadius.circular(
+                100)), //Makes the shape of the button and establishes the radius of the circle.
+        child: InkWell(
+          //Ink well makes the button tappable, so we wrap this all in an inkwell widget.
+          onTap: () {},
+          child: Center(
+            child: Text(value),
+          ),
         ),
       ),
     );
+  }
+
+  Color getBtnColor(value) {
+    return [Btn.del, Btn.clr].contains(value)
+        ? Colors.blueGrey
+        : [
+            Btn.per,
+            Btn.multiply,
+            Btn.add,
+            Btn.subtract,
+            Btn.divide,
+            Btn.calculate,
+          ].contains(value)
+            ? Colors.orange
+            : Colors.black87;
   }
 }
