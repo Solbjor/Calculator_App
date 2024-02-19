@@ -66,7 +66,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           //Ink well makes the button tappable, so we wrap this all in an inkwell widget.
           onTap: () {},
           child: Center(
-            child: Text(value),
+            child: Text(
+              value,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            ),
           ),
         ),
       ),
